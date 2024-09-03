@@ -4,15 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Weapon/ModularWeapon.h"
 #include "CommonTypes/CommonTypes.h"
 #include "ModularCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
-class AModularWeapon;
+class UAnabasisWeaponData;
+class UModularAbility;
+class UBaseAnimInstance;
 
 UCLASS()
-class ANABASIS_API AModularCharacter : public ACharacter
+class ANABASIS_API AModularCharacter : public ACharacter, public IModularWeapon
 {
 	GENERATED_BODY()
 
@@ -20,8 +23,6 @@ public:
 	AModularCharacter();
 	virtual void Tick(float DeltaTime) override;
 
-	FORCEINLINE void SetWeapon(AModularWeapon* weapon) { Weapon = weapon; }
-	FORCEINLINE AModularWeapon* GetWeapon() const { return Weapon; }
 	FORCEINLINE ECharacterStates GetCharacterState() const { return CharacterState; }
 	FORCEINLINE void SetCharacterState(ECharacterStates Type) { CharacterState = Type; }
 
@@ -31,11 +32,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSprintArmLength(float length);
 
-	void PitchFire();
+	virtual void Attack() override;
 
 protected:
 	virtual void BeginPlay() override;
+	virtual bool CanAttack() override;
+	virtual void CountDownEvent(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "ModularCharacter")
+	UModularAbility* AbilityData;
+
+	UPROPERTY()
+	UBaseAnimInstance* BaseAnimInstance;
+
+	ECharacterStates CharacterState = ECharacterStates::Idle;
 private:
 
     UPROPERTY(EditAnywhere, Category = "ModularCharacter", meta = (AllowPrivateAccess))
@@ -44,8 +54,4 @@ private:
     UPROPERTY(EditAnywhere, Category = "ModularCharacter", meta = (AllowPrivateAccess))
     UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = "ModularCharacter", meta = (AllowPrivateAccess))
-	AModularWeapon* Weapon = nullptr;
-
-	ECharacterStates CharacterState = ECharacterStates::Idle;
 };

@@ -8,6 +8,7 @@
 #include "BaseAnimInstance.generated.h"
 
 class AModularCharacter;
+class UCharacterMovementComponent;
 
 UCLASS()
 class ANABASIS_API UBaseAnimInstance : public UAnimInstance
@@ -18,25 +19,17 @@ public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	FORCEINLINE void SetInputValue(const FVector2D& TargetInputValue) { InputValue = TargetInputValue; }
-	FORCEINLINE void SetMousePos(const FVector& TargetMousePos) { MousePos = TargetMousePos; }
-
 protected:
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAnimInstance", meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAnimInstance")
 	AModularCharacter* Owner;
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAnimInstance", meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAnimInstance")
+	UCharacterMovementComponent* MovementComponent;
 
-	FVector2D DirValue;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAnimInstance", meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadWrite, Category = "BaseAnimInstance")
 	ECharacterStates CharacterState;
 
 private:
 
-	void CalculateDirValue();
-
-	FVector2D InputValue;
-	FVector MousePos;
 };

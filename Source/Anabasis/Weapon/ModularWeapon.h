@@ -2,52 +2,21 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "ModularWeapon.generated.h"
 
-class USkeletalMeshComponent;
-class USphereComponent;
-class AModularCharacter;
-class UAnabasisWeaponData;
-
-UCLASS()
-class ANABASIS_API AModularWeapon : public AActor
+UINTERFACE(MinimalAPI)
+class UModularWeapon : public UInterface
 {
 	GENERATED_BODY()
-	
-public:	
-	AModularWeapon();
-	virtual void Tick(float DeltaTime) override;
-	void Fire(const FVector&);
+};
 
-protected:
-	virtual void BeginPlay() override;
+class ANABASIS_API IModularWeapon
+{
+	GENERATED_BODY()
+public:
 
-private:
+	virtual void Attack() = 0;
+	virtual bool CanAttack() = 0;
+	virtual void CountDownEvent(float DeltaTime) = 0;
 
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	bool CanFire();
-	void CountDownEvent(float DeltaTime);
-
-	UPROPERTY()
-	AModularCharacter* WeaponOwner;
-
-	UPROPERTY(EditAnywhere, Category = "ModularWeapon", meta = (AllowPrivateAccess))
-	FName SocketName;
-	
-	UPROPERTY(EditAnywhere, Category = "ModularWeapon", meta = (AllowPrivateAccess))
-	UAnabasisWeaponData* WeaponData;
-
-	float CountDownTimer = 0.0f;
-	int32 Ammo;
-
-	UPROPERTY(EditAnywhere, Category = "ModularWeapon", meta = (AllowPrivateAccess))
-	USkeletalMeshComponent* MeshComponent;
-
-	UPROPERTY(EditAnywhere, Category = "ModularWeapon", meta = (AllowPrivateAccess))
-	USphereComponent* SphereComponent;
-	
 };

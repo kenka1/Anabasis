@@ -2,6 +2,8 @@
 
 
 #include "Character/ModularCharacter.h"
+#include "Animation/BaseAnimInstance.h"
+#include "Ability/ModularAbility.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -32,13 +34,32 @@ AModularCharacter::AModularCharacter()
 void AModularCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	BaseAnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 void AModularCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AModularCharacter::Attack()
+{
+	if (CanAttack() && BaseAnimInstance)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attack"));
+		CharacterState = ECharacterStates::Attack;
+		BaseAnimInstance->Montage_Play(AbilityData->DefaultAttackMontage);
+	}
+}
+
+bool AModularCharacter::CanAttack()
+{
+	return CharacterState != ECharacterStates::Attack;
+}
+
+void AModularCharacter::CountDownEvent(float DeltaTime)
+{
 }
 
 float AModularCharacter::GetSpringArmLength() const
@@ -49,8 +70,4 @@ float AModularCharacter::GetSpringArmLength() const
 void AModularCharacter::SetSprintArmLength(float length)
 {
 	SpringArmComponent->TargetArmLength = length;
-}
-
-void AModularCharacter::PitchFire()
-{
 }

@@ -10,18 +10,14 @@
 void UBaseAnimInstance::NativeInitializeAnimation()
 {
 	Owner = Cast<AModularCharacter>(GetOwningActor());
+
+	Owner = Cast<AModularCharacter>(TryGetPawnOwner());
+	if (Owner)
+		MovementComponent = Cast<UCharacterMovementComponent>(Owner->GetMovementComponent());
 }
 
 void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-
-}
-
-void UBaseAnimInstance::CalculateDirValue()
-{
-	FVector RightAxis = UKismetMathLibrary::Cross_VectorVector(FVector(0.0f, 0.0f, 1.0f), FVector(MousePos.X, MousePos.Y, 0.0));
-	RightAxis.Normalize();
-
-	DirValue.X = UKismetMathLibrary::DotProduct2D(FVector2D(MousePos.X, MousePos.Y), InputValue);
-	DirValue.Y = UKismetMathLibrary::DotProduct2D(FVector2D(RightAxis.X, RightAxis.Y), InputValue);
+	if (Owner)
+		CharacterState = Owner->GetCharacterState();
 }

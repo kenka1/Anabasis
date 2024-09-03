@@ -28,8 +28,8 @@ private:
     void Action_Look(float DeltaSeconds);
     void Action_Zoom(const FInputActionValue& InputActionValue);
     void Timer_Zoom();
-    void Action_Fire();
-    void Action_FireStop();
+    void Action_Attack();
+    void Action_AttackStop();
     void ClaculateNormalizeMousePosition();
 
     UPROPERTY(EditAnywhere, Category = "AnabasisCharacterController", meta = (AllowPrivateAccess))
