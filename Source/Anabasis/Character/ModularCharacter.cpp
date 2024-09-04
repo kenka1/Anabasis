@@ -40,26 +40,52 @@ void AModularCharacter::BeginPlay()
 void AModularCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	ResetCountingDown(DeltaTime);
 
 }
 
 void AModularCharacter::Attack()
 {
-	if (CanAttack() && BaseAnimInstance)
+	if (CanAttack())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Attack"));
 		CharacterState = ECharacterStates::Attack;
-		BaseAnimInstance->Montage_Play(AbilityData->DefaultAttackMontage);
+		CountingDown = AbilityData->DefaultAttackCountDown;
+		PlayAttackMontage();
 	}
 }
 
 bool AModularCharacter::CanAttack()
 {
-	return CharacterState != ECharacterStates::Attack;
+	return CountingDown <= 0 && BaseAnimInstance && CharacterState != ECharacterStates::Attack;
 }
 
 void AModularCharacter::CountDownEvent(float DeltaTime)
 {
+}
+
+void AModularCharacter::PlayAttackMontage()
+{
+	if (AbilityData->DefaultAttackMontages.Num() != 0)
+	{
+		BaseAnimInstance->Montage_Play(AbilityData->DefaultAttackMontages[DefaultAttackIndex]);
+		DefaultAttackIndex = (DefaultAttackIndex + 1) % AbilityData->DefaultAttackMontages.Num();
+	}
+}
+
+void AModularCharacter::ResetCountingDown(float DeltaTimes)
+{
+	if (CountingDown > 0)
+	{
+		CountingDown -= DeltaTimes;
+		ResetCharacterState();
+	}
+}
+
+void AModularCharacter::ResetCharacterState()
+{
+	if (CharacterState == ECharacterStates::Attack)
+		CharacterState = ECharacterStates::Idle;
 }
 
 float AModularCharacter::GetSpringArmLength() const

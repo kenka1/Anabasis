@@ -13,5 +13,9 @@ UCLASS()
 class ANABASIS_API AGrux : public AModularCharacter
 {
 	GENERATED_BODY()
-	
+public:
+
+protected:
+
+private:
 };

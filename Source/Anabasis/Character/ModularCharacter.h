@@ -38,6 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual bool CanAttack() override;
 	virtual void CountDownEvent(float DeltaTime) override;
+	void PlayAttackMontage();
 
 	UPROPERTY(EditAnywhere, Category = "ModularCharacter")
 	UModularAbility* AbilityData;
@@ -46,7 +47,12 @@ protected:
 	UBaseAnimInstance* BaseAnimInstance;
 
 	ECharacterStates CharacterState = ECharacterStates::Idle;
+	int8 DefaultAttackIndex = 0;
+	float CountingDown = 0.0f;
 private:
+
+	void ResetCountingDown(float DeltaTimes);
+	void ResetCharacterState();
 
     UPROPERTY(EditAnywhere, Category = "ModularCharacter", meta = (AllowPrivateAccess))
     USpringArmComponent* SpringArmComponent;

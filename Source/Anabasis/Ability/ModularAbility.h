@@ -16,8 +16,8 @@ class ANABASIS_API UModularAbility : public UDataAsset
 public:
 
 	UPROPERTY(EditAnywhere, Category = "AnabasisWeaponData")
-	float CountDown = 0.1f;
+	float DefaultAttackCountDown = 0.1f;
 
 	UPROPERTY(EditAnywhere, Category = "ModularAbility")
-	UAnimMontage* DefaultAttackMontage;
+	TArray<UAnimMontage*> DefaultAttackMontages;
 };
